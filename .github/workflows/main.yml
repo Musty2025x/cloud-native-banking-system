@@ -68,13 +68,25 @@ jobs:
           kubectl config view
           kubectl get nodes
 
-      # 8️⃣ Deploy microservices
-      - name: Deploy microservices
-        run: |
-          SERVICES=("accounts" "auth" "notifications" "transactions")
-          for SERVICE in "${SERVICES[@]}"; do
-            echo "Deploying $SERVICE..."
-            IMAGE_URI="${ECR_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com/$SERVICE:$(date +%Y%m%d%H%M%S)"
-            kubectl set image deployment/$SERVICE $SERVICE=$IMAGE_URI -n default
-            kubectl rollout status deployment/$SERVICE --timeout=5m
-          done
+     # 8️⃣ Deploy microservices
+       - name: Deploy microservices
+  run: |
+    # Array of your deployments
+    DEPLOYMENTS=("accounts-service" "auth-service" "notifications-service" "transactions-service")
+    
+    for DEPLOYMENT in "${DEPLOYMENTS[@]}"; do
+      # Strip "-service" to get the container name
+      CONTAINER_NAME="${DEPLOYMENT%-service}"
+      
+      # Use the environment variable IMAGE_URI_<container> set during the build step
+      IMAGE_VAR="IMAGE_URI_${CONTAINER_NAME}"
+      IMAGE_URI="${!IMAGE_VAR}"
+      
+      echo "Deploying $DEPLOYMENT using container $CONTAINER_NAME with image $IMAGE_URI..."
+      
+      # Update the deployment image
+      kubectl set image deployment/$DEPLOYMENT $CONTAINER_NAME=$IMAGE_URI -n default
+      
+      # Wait for the rollout to complete
+      kubectl rollout status deployment/$DEPLOYMENT --timeout=5m
+    done
