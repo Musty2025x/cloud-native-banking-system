@@ -72,7 +72,10 @@ jobs:
       # 8️⃣ Apply Kubernetes manifests (CRITICAL FIX)
       - name: Apply Kubernetes manifests
         run: |
-          kubectl apply -f k8s/ -n default
+          kubectl apply -f accounts/accounts-deployment.yaml -n default
+          kubectl apply -f auth/auth-deployment.yaml -n default
+          kubectl apply -f notifications/notifications-deployment.yaml -n default
+          kubectl apply -f transactions/transactions-deployment.yaml -n default
 
       # 9️⃣ Deploy microservices (image update + rollout)
       - name: Deploy microservices
