@@ -72,7 +72,7 @@ jobs:
       # 8️⃣ Apply Kubernetes manifests (CRITICAL FIX)
       - name: Apply Kubernetes manifests
         run: |
-          kubectl apply -f k8s/ -n $NAMESPACE
+          kubectl apply -f k8s/ -n default
 
       # 9️⃣ Deploy microservices (image update + rollout)
       - name: Deploy microservices
@@ -88,7 +88,7 @@ jobs:
 
             kubectl set image deployment/$DEPLOYMENT \
               $CONTAINER_NAME=$IMAGE_URI \
-              -n $NAMESPACE
+              -n default
 
             kubectl rollout status deployment/$DEPLOYMENT \
               -n $NAMESPACE --timeout=5m
