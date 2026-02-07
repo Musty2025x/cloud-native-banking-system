@@ -9,8 +9,8 @@ permissions:
   contents: read  # Only need checkout permissions now
 
 env:
-  AWS_REGION: us-west-2
-  ECR_ACCOUNT: "986778210363"
+  AWS_REGION: us-east-1
+  ECR_ACCOUNT: "168377603278"
 
 jobs:
   build-and-deploy:

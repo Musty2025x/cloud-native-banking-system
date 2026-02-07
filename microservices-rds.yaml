@@ -6,7 +6,7 @@ metadata:
   name: microservices-db-credentials
 type: Opaque
 stringData:
-  DB_HOST: banking-db-primary.c1o0amwco2yd.us-west-2.rds.amazonaws.com
+  DB_HOST: banking-db-primary.c1o0amwco2yd.us-east-1.rds.amazonaws.com
   DB_PORT: "5432"
   DB_NAME: bankingdb
   DB_USER: postgres
@@ -48,7 +48,7 @@ spec:
     spec:
       containers:
         - name: accounts
-          image: 986778210363.dkr.ecr.us-west-2.amazonaws.com/accounts:latest
+          image: 168377603278.dkr.ecr.us-east-1.amazonaws.com/accounts:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
@@ -83,7 +83,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: 986778210363.dkr.ecr.us-west-2.amazonaws.com/accounts:latest
+          image: 168377603278.dkr.ecr.us-east-1.amazonaws.com/accounts:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
@@ -118,7 +118,7 @@ spec:
     spec:
       containers:
         - name: notification
-          image: 986778210363.dkr.ecr.us-west-2.amazonaws.com/accounts:latest
+          image: 168377603278.dkr.ecr.us-east-1.amazonaws.com/accounts:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
@@ -153,7 +153,7 @@ spec:
     spec:
       containers:
         - name: transactions
-          image: 986778210363.dkr.ecr.us-west-2.amazonaws.com/accounts:latest
+          image: 168377603278.dkr.ecr.us-east-1.amazonaws.com/accounts:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8000

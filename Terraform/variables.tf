@@ -1,9 +1,9 @@
-ariable "aws_region" {
-  default = "us-west-2" # Fresh start in Oregon
+variable "aws_region" {
+  default = "us-east-1" # Fresh start in usa
 }
 
 variable "availability_zones" {
-  default = ["us-west-2a", "us-west-2b"]
+  default = ["us-east-1a", "us-east-1b"]
 }
 
 variable "vpc_cidr" {
