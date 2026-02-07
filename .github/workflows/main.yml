@@ -63,27 +63,33 @@ jobs:
         run: |
           aws eks update-kubeconfig --region $AWS_REGION --name eks-banking-cluster
 
-      # 7️⃣ Test EKS access
-      - name: Test EKS access
+      # 7️⃣ Verify EKS access
+      - name: Verify EKS access
         run: |
-          kubectl config view
           kubectl get nodes
+          kubectl get namespaces
 
-      # 8️⃣ Deploy microservices
+      # 8️⃣ Apply Kubernetes manifests (CRITICAL FIX)
+      - name: Apply Kubernetes manifests
+        run: |
+          kubectl apply -f k8s/ -n $NAMESPACE
+
+      # 9️⃣ Deploy microservices (image update + rollout)
       - name: Deploy microservices
         run: |
           DEPLOYMENTS=("accounts-service" "auth-service" "transactions-service")
-          
+
           for DEPLOYMENT in "${DEPLOYMENTS[@]}"; do
             CONTAINER_NAME="${DEPLOYMENT%-service}"
             IMAGE_VAR="IMAGE_URI_${CONTAINER_NAME}"
             IMAGE_URI="${!IMAGE_VAR}"
 
-            echo "Deploying $DEPLOYMENT using container $CONTAINER_NAME with image $IMAGE_URI..."
-            
-            # Update deployment image
-            kubectl set image deployment/$DEPLOYMENT $CONTAINER_NAME=$IMAGE_URI -n default
+            echo "Deploying $DEPLOYMENT with $IMAGE_URI"
 
-            # Wait for rollout to complete
-            kubectl rollout status deployment/$DEPLOYMENT --timeout=5m || exit 1
+            kubectl set image deployment/$DEPLOYMENT \
+              $CONTAINER_NAME=$IMAGE_URI \
+              -n $NAMESPACE
+
+            kubectl rollout status deployment/$DEPLOYMENT \
+              -n $NAMESPACE --timeout=5m
           done
